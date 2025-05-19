@@ -37,8 +37,21 @@ export const getUserTasks = asyncHandler(async (req, res,next) => {
   const page = req.query.page * 1 || 1;
   const limit = req.query.limit * 1 || 5;
   const skip = (page - 1) * limit;
-  const tasks = await Task.find({ user: req.user.userId }).sort({ dueDate: 1 }).skip(skip).limit(limit);
-  if(!tasks){return next(new ApiError("no tasks yet", 404)) }
+  const query = { user: req.user.userId };
+
+  if (req.query.status) {
+    query.status = req.query.status;
+  }
+  
+  const tasks = await Task.find(query)
+    .sort({ dueDate: 1 })
+    .skip(skip)
+    .limit(limit);
+  
+  if (!tasks) {
+    return next(new ApiError("no tasks yet", 404));
+  }
+  
   res.status(200).json({ data: tasks });
 });
 

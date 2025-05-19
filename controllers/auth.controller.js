@@ -74,7 +74,7 @@ export const login = asyncHandler(async (req, res, next) => {
       messgae: "login sucessfully",
     });
   } else {
-    return next(new ApiError("Invalid email or password",401));
+    return next(new ApiError("Invalid phone or password",401));
   }
 });
 
