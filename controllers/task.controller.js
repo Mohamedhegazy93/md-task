@@ -7,7 +7,7 @@ import ApiError from "../utils/apiError.js";
 export const createTask = asyncHandler(async (req, res,next) => {
     const { title, desc, priority, dueDate } = req.body;
     const userId = req.user.userId;
-    
+
     // check task duplicated 
     const taskDuplicated=await Task.findOne({title,desc})
     if(taskDuplicated){
@@ -28,7 +28,7 @@ export const createTask = asyncHandler(async (req, res,next) => {
       user: userId,
     });
   
-    res.status(201).json({ data: task });
+    res.status(201).json({ message: 'task created sucessfully' });
   });
 
 // @desc    Get all tasks
@@ -38,7 +38,7 @@ export const getUserTasks = asyncHandler(async (req, res,next) => {
   const limit = req.query.limit * 1 || 5;
   const skip = (page - 1) * limit;
   const tasks = await Task.find({ user: req.user.userId }).sort({ dueDate: 1 }).skip(skip).limit(limit);
-  if(!tasks){return next(new ApiError("Not tasks yet", 404)) }
+  if(!tasks){return next(new ApiError("no tasks yet", 404)) }
   res.status(200).json({ data: tasks });
 });
 
@@ -59,7 +59,7 @@ export const updateTask = asyncHandler(async (req, res,next) => {
     { new: true, runValidators: true }
   );
   if (!updated) return next (new ApiError("Task not found", 404));
-  res.status(200).json({ data: updated });
+  res.status(200).json({ message: 'task updated sucessfully' });
 });
 
 // @desc    Delete task
@@ -70,5 +70,5 @@ export const deleteTask = asyncHandler(async (req, res) => {
     user: req.user.userId,
   });
   if (!deleted) return next (new ApiError("Task not found", 404));
-  res.status(200).json({ message: "Task deleted successfully" });
+  res.status(200).json({ message: "task deleted successfully" });
 });
