@@ -50,9 +50,8 @@ export const register = asyncHandler(async (req, res) => {
   // check phone number duplicated (user existed)
   const existingUser = await User.findOne({ phone });
   if (existingUser) {
-    return res
-      .status(409)
-      .json({ message: "user already existed due to phone number" });
+    return next(new ApiError("Invalid phone or password",409));
+
   }
 
   const user = await User.create(req.body);

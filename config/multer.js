@@ -3,7 +3,7 @@ import path from "path";
 import User from "../models/user.model.js";
 import fs from "fs";
 
-// Dynamic folder path
+// dynamic folder path
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {
     const userId = req.user?.userId?.toString();
